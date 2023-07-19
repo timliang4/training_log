@@ -1,11 +1,16 @@
-import datetime
+from datetime import datetime
 
 class Activity:
-    def __init__(self, activity_data):
+    def __init__(self, activity_data, existing_activity):
         self.data = activity_data
         self.want_to_continue = True
-        # Add an exercises key-value pair in the data dictionary
-        self.data['exercises'] = {}
+        # If not an existing activity, add an exercises key-value pair in the data dictionary
+        if not existing_activity:
+            self.data['exercises'] = {}
+        # If existing activity, turn date and time string into datetime object
+        if existing_activity:
+            date_string = self.data['date and time'] 
+            self.data['date and time'] = datetime.strptime(date_string, '%m/%d/%Y %H:%M')
         # Prompt user with options
         while self.want_to_continue:
             print(50*'-')
@@ -160,8 +165,11 @@ class Activity:
                 choice_is_valid = True
 
     def write_data(self):
+        activity_date = self.data['date and time']
         # write dictionary to a txt file
-        file_name = 'activity_log/' + self.data['date and time'].strftime('%m_%d_%Y__%H_%M')
+        file_name = 'activity_log/' + activity_date.strftime('%m_%d_%Y__%H_%M')
+        # change date and time object back to a string
+        self.data['date and time'] = activity_date.strftime('%m/%d/%Y %H:%M')
         with open(file_name, 'w', encoding='utf-8') as f:
             f.write(str(self.data))
         print('done')

@@ -1,4 +1,6 @@
 import datetime
+import os
+import ast
 from activity_class import Activity
 
 def main():
@@ -25,15 +27,39 @@ def main():
             if choice == 1:
                 date_time_location = get_date_time_location()
                 if date_time_location == 'q': continue
-                act = Activity(date_time_location)
+                act = Activity(date_time_location, False)
             # User wants to access an exisiting activity
             elif choice == 2: 
-                print('hi')
+                activity_data = get_past_activity()
+                if activity_data == 'q': continue
+                act = Activity(activity_data, True)
             # User wants to exit
             else:
                 print('Goodbye')
                 want_to_continue = False
 
+def get_past_activity():
+    past_activity_directory = os.path.join('.','activity_log')
+    past_activities = os.listdir(past_activity_directory)
+    input_not_valid = True
+    while input_not_valid:
+        print(50*'-')
+        print('0 - exit past activities')
+        for index, activity in enumerate(past_activities):
+            print(f'{index + 1} - {activity}')
+        try: choice = int(input('Please enter the number preceding the selected activity or press 0 to exit: '))
+        except ValueError: print('Please enter a number.')
+        else:
+            if choice == 0:
+                return 'q'
+            if choice > len(past_activities):
+                print('Invalid number.')
+            else:
+                selected_past_activity = os.path.join(past_activity_directory, past_activities[choice - 1])
+                with open(selected_past_activity, 'r', encoding='utf-8') as f:
+                    activity_data = f.read()
+                return ast.literal_eval(activity_data)
+        
 def get_date_time_location():
     activity_data = {}
     # get date
