@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import os
 import ast
 from activity_class import Activity
@@ -67,12 +67,12 @@ def get_date_time_location():
     # get date
     date_is_valid = False
     while date_is_valid == False:
-        date_is_valid = validate_date(input('Please enter activity date (mm/dd/yyyy) or press q to exit: '))
+        date_is_valid = Activity.validate_date(input('Please enter activity date (mm/dd/yyyy) or press q to exit: '))
         if date_is_valid == 'q': return 'q'
     # get time
     datetime_is_valid = False
     while datetime_is_valid == False:
-        datetime_is_valid = validate_time(input('Please enter activity time (hh:mm) or press q to exit: '), date_is_valid)
+        datetime_is_valid = Activity.validate_time(input('Please enter activity time (hh:mm) or press q to exit: '), date_is_valid)
         if datetime_is_valid == 'q': return 'q'
         if datetime_is_valid: activity_data['date and time'] = datetime_is_valid
     # get location
@@ -84,46 +84,6 @@ def get_date_time_location():
     
     # return activity data dictionary
     return activity_data
-
-def validate_date(input_date):
-    # If date is invalid then return False, if user enters 'q' then return 'q', if date is valid then return the date object
-    if input_date == 'q':
-        return 'q'
-    split_date = input_date.split('/')
-    # Check if the user entered two back slashes
-    if len(split_date) != 3:
-        return False
-    # Check if the user entered numbers
-    try: split_int_date = [int(element) for element in split_date]
-    except ValueError: return False
-    else: 
-        # Check if the user entered a date that isn't in the future
-        activity_date = datetime.datetime(split_int_date[2], split_int_date[0], split_int_date[1], 0, 0, 0)
-        if activity_date > datetime.datetime.now():
-            return False
-        # Return the valid date
-        return activity_date
-
-def validate_time(input_time, activity_date):
-    # If timd is invalid then return False, if user enters 'q' then return 'q', if time is valid then return the time object
-    if input_time == 'q':
-        return 'q'
-    split_time = input_time.split(':')
-    # Check if the user entered one colon
-    if len(split_time) != 2:
-        return False
-    # Check if the user entered numbers
-    try: split_int_time = [int(element) for element in split_time]
-    except ValueError: return False
-    else:
-        # Add the time to the existing activity_date datetime object
-        activity_datetime = activity_date.replace(hour=split_int_time[0])
-        activity_datetime = activity_datetime.replace(minute=split_int_time[1])
-        if activity_datetime > datetime.datetime.now():
-            return False
-        # return the valid datetime
-        return activity_datetime
             
 if __name__ == '__main__':
     main()
-
