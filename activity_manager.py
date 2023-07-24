@@ -40,6 +40,8 @@ def main():
 
 def get_past_activity():
     past_activity_directory = os.path.join('.','activity_log')
+    if not os.path.exists(past_activity_directory):
+        os.mkdir(past_activity_directory)
     past_activities = os.listdir(past_activity_directory)
     input_not_valid = True
     while input_not_valid:
