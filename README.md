@@ -1,5 +1,5 @@
 # Training Log
->Extensible training log for exercise. This tool is open-source, so feel free to change the source code to suit your activities.
+>Extensible training log for exercise. Feel free to change the source code to suit your activities.
 
 # Usage
 <ol>
